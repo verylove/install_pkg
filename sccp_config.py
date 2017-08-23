@@ -189,3 +189,4 @@ def main():
     if temp:
         config_zookeeper()
         config_collectMaster()
+        config_web()
