@@ -188,3 +188,4 @@ def main():
     print temp
     if temp:
         config_zookeeper()
+        config_collectMaster()
