@@ -137,6 +137,39 @@ def config_web():
         commands.getoutput(cmd)
         cmd = "sed -i s#^rest.room3d.url.*#rest.room3d.url=http://"+sccpIp[0]+":"+sccpPort[0]+"/insightview#g "+path
         commands.getoutput(cmd)
+        cmd = "sed -i s#^cmdb.host.*#cmdb.host=http://"+sccpIp[0]+":"+sccpPort[0]+"/insightview/rest/cmdb/monitor/SyncResAndOMapping#g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s#^rest.resSychron.url.*#rest.resSychron.url=http://"+sccpIp[0]+":"+sccpPort[0]+"/insightview#g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s#^rest.machineRoom.alarms.*#rest.machineRoom.alarms=http://"+sccpIp[0]+":"+sccpPort[0]+"/insightview/rest/monitor/alarm/alarmsOfRoom#g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s#^rest.monitor.types.*#rest.monitor.types=http://"+sccpIp[0]+":"+sccpPort[0]+"/insightview/rest/monitor/alarm/monitorTypes#g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s#^rest.backlog.url.*#rest.backlog.url=http://"+portalIp[0]+":"+portalPort[0]+"/insightviewPortal/rest/backlog#g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s#^rest.bpmConsole.machingAlarm.*#rest.bpmConsole.machingAlarm=http://"+sccpIp[0]+":"+sccpPort[0]+"/insightview#g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s#^fileDeleteServerPath.*#fileDeleteServerPath=http://"+sccpIp[0]+":"+sccpPort[0]+"/FileBank/FileDelete?fileDir=#g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s#^rest.workflow.Alarm.*#rest.workflow.Alarm=http://"+itilIp[0]+":"+itilPort[0]+"/itil-app/workflow#g "+path
+        commands.getoutput(cmd)
+        cmd = "cat "+path
+        output = commands.getoutput(cmd)
+        log.debug(output)
+
+    path = basePath+fdbPath
+    log.debug(path)
+    if os.path.exists(path):
+        cmd = "sed -i s/^jdbc.username.*/jdbc.username="+databaseUsername[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^jdbc.password.*/jdbc.password="+databasePassword[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s#//.*\?#//"+databaseIp[0]+":"+databasePort[0]+"/"+databaseSchema[0]+"\?#g "+path
+        commands.getoutput(cmd)
+        cmd = "cat "+path
+        output = commands.getoutput(cmd)
+        log.debug(output)
+
 
 def get_install_dir():
     path = "/root/.bashrc"
