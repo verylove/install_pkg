@@ -171,6 +171,79 @@ def config_web():
         log.debug(output)
 
 
+def config_datatransfer():
+    path = basePath+dataPath
+    log.debug(path)
+    msg = "configuration of datatransfer\n"
+    print msg
+
+    if os.path.exists(path):
+        cmd = "sed -i s/^host[^bak].*/host="+databaseIp[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^port[^bak].*/port="+databasePort[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^username[^bak].*/username="+databaseUsername[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^password[^bak].*/password="+databasePassword[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^schema[^bak].*/schema="+databaseSchema[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^hostbak.*/hostbak="+databaseIp[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^portbak.*/portbak="+databasePort[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^usernamebak.*/usernamebak="+databaseUsername[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^passwordbak.*/passwordbak="+databasePassword[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "sed -i s/^schemabak.*/schemabak="+databaseSchema[0]+"/g "+path
+        commands.getoutput(cmd)
+        cmd = "cat "+path
+        output = commands.getoutput(cmd)
+        log.debug(output)
+
+
+def config_portal():
+        print "replace web-cas.xml to web.xml "
+        commands.getoutput("cp -f /Fablesoft/InsightView/third/apache-tomcat-insightview/webapps/insightview/WEB-INF/web.xml /Fablesoft/InsightView/third/apache-tomcat-insightview/webapps/insightview/WEB-INF/web.xml-bak")
+        commands.getoutput("cp -f /Fablesoft/InsightView/third/apache-tomcat-insightview/webapps/insightview/WEB-INF/web-cas.xml /Fablesoft/InsightView/third/apache-tomcat-insightview/webapps/insightview/WEB-INF/web-cas.xml-bak")
+        commands.getoutput("cp -f /Fablesoft/InsightView/third/apache-tomcat-insightview/webapps/insightview/WEB-INF/web-cas.xml-bak /Fablesoft/InsightView/third/apache-tomcat-insightview/webapps/insightview/WEB-INF/web.xml")
+        msg = "configuration of portal\n"
+        print msg
+        log.debug(msg)
+
+        path = basePath+pmyPath
+        print path
+        log.debug(path)
+        if os.path.exists(path):
+            cmd = "sed -i s#^cas.url.*#cas.url="+portalIp[0]+":"+portalPort[0]+"#g "+path
+            commands.getoutput(cmd)
+            cmd = "sed -i s#^insightview.url.*#insightview.url="+sccpIp[0]+":"+sccpPort[0]+"#g "+path
+            commands.getoutput(cmd)
+            cmd = "sed -i s#^jms.broker.url.*#jms.broker.url=failover:\\(tcp://"+portalIp[0]+":61616\\)#g "+path
+            commands.getoutput(cmd)
+            output = commands.getoutput("cat "+path)
+            print output
+            log.debug(output)
+
+            path = basePath+fparamPath
+            print path+"/n"
+            log.debug(path)
+            if os.path.exists(path):
+                cmd = "sed -i s#^ngoms.insigtview.server.*#ngoms.insigtview.server=http://"+portalIp[0]+":"+portalPort[0]+"#g "+path
+                commands.getoutput(cmd)
+                cmd = "sed -i s#^rest.ngoms.process.url.*#rest.ngoms.process.url=http://$portalIp[0]:"+portalPort[0]+"/insightviewPortal/rest/tasks{0}#g "+path
+                commands.getoutput(cmd)
+                cmd = "sed -i s#^portalFileServerURL.*#portalFileServerURL=http://"+portalIp[0]+":"+portalPort[0]+"/FileBank/FileDir/#g "+path
+                commands.getoutput(cmd)
+                cmd = "sed -i s#^portalFileDeleteServerPath.*#portalFileDeleteServerPath=http://"+portalIp[0]+":"+portalPort[0]+"/FileBank/FileDelete?fileDir=#g "+path
+                commands.getoutput(cmd)
+                output = commands.getoutput("cat "+path)
+                print output
+                log.debug(output)
+
+
+
 def get_install_dir():
     path = "/root/.bashrc"
     f = open(path)
@@ -190,3 +263,10 @@ def main():
         config_zookeeper()
         config_collectMaster()
         config_web()
+        config_datatransfer()
+        config_portal()
+    else:
+        print "Failed to get installation directory,Confirm whether the configuration\n\n"
+    return 1
+
+main()
