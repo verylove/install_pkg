@@ -3,10 +3,9 @@
 import commands
 import basicLogger
 import os
-import sh
 
 installDir = "/Fablesoft/InsightView"
-log = basicLogger.SelfLog("/logs/install.logs").logger
+log = basicLogger.SelfLog(installDir+"/logs/install.logs").logger
 
 
 def install_options():
@@ -120,6 +119,7 @@ def install_collectorServer():
     basePack4 = basePackPrefix4+verArr[1]+basePackSuffix
     cmd = "tar -zxvf "+basePack4+"-C "+installDir
     commands.getoutput(cmd)
+
 
 # SCCP Platform
 def install_controlData():
