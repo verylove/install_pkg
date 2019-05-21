@@ -1,2 +1,2 @@
 # install_pkg
-一键部署
+一键部署ces
